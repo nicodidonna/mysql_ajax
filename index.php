@@ -9,15 +9,53 @@
 <body>
 
     <div class="container">
+        <h2 class="text-center">ESERCIZIO PHP-AJAX</h2>
     
-    <button id="nuova-riga">Inserisci persona</button>
     <div id="tabella-container"></div>
+
+    <div class="row mt-5">
+
+        <div class="col">
+
+            <h4 class="text-center">FORM INSERIMENTO RIGA</h4>
+            <form>
+
+                <label for="nome">Inserisci nome</label>
+                <input type="text" id="nome" name="nome">
+
+                <label for="cognome">Inserisci cognome</label>
+                <input type="text" id="cognome" name="cognome">
+
+                <label for="email">Inserisci email</label>
+                <input type="text" id="email" name="email">
+
+                <button id="nuova-riga" class="mt-3">Inserisci persona</button>
+
+            </form>
+
+        </div>
+
+        <div class="col">
+
+        <h4 class="text-center">FORM UPDATE EMAIL</h4>
+        <h6 class="text-center">Inserisci la mail da sostituire e clicca su "modifica" accanto alla riga da modificare</h6>
+            <form>
+
+                <label for="newMail">Inserisci nuova mail</label>
+                <input type="text" id="newEmail" name="mail">
+
+            </form>
+            
+        </div>
+
+    </div>
+    
 
     </div>
 
 <script>
     let persone;
-    let bottoneInserisci = document.querySelector('#nuova-riga');
+    let bottoneInserisci = document.getElementById('nuova-riga');
     let tabellaContainer = document.querySelector("#tabella-container");
     bottoneInserisci.addEventListener('click', inserisciPersona);
 
@@ -34,7 +72,9 @@
     .then(data => {
         persone = data;
         console.log('Dati ricevuti: ',data);
-        let tabella = `<table>
+        let tabella = `
+        <div class="row">
+        <table class='text-center' id='tabella-db'>
 
 <thead>
     <tr>
@@ -49,7 +89,8 @@
     ${generaRighe(data)}
 </tbody>
 
-</table>`;
+</table>
+</div>`;
 
 tabellaContainer.insertAdjacentHTML('beforeend', tabella);
 let bottoniModifica = document.querySelectorAll(".modifica-persona");
@@ -95,9 +136,12 @@ for(let i = 0; i < bottoniElimina.length;  i++){
 
     function inserisciPersona(){
         const formData = new FormData;
-        formData.append('nome', 'Romeo');
-        formData.append('cognome', 'Santos');
-        formData.append('email', 'romeo.santos@gmail.com');
+        nome = document.getElementById('nome').value;
+        cognome = document.getElementById('cognome').value;
+        email = document.getElementById('email').value;
+        formData.append('nome', nome);
+        formData.append('cognome', cognome);
+        formData.append('email', email);
         
 
         fetch('./php/insert.php', {
@@ -116,15 +160,11 @@ for(let i = 0; i < bottoniElimina.length;  i++){
         });
     }
 
-    function aggiornaTabella(){
-        let tabella = document.querySelector('table');
-        tabellaContainer.removeChild(tabella);
-        generaTabella();
-    };
+    
 
     function modificaPersona(evento){
         let id =  evento.target.getAttribute('data-val');
-        let nuovaEmail = 'emailmodificata@gmail.com';
+        let nuovaEmail = document.getElementById('newEmail').value;
         console.log('Modifico persona: ', id);
         const formData = new FormData;
         formData.append('id_persona', id);
@@ -168,6 +208,12 @@ for(let i = 0; i < bottoniElimina.length;  i++){
             console.log('Errore: ',error);
         });
     }
+
+    function aggiornaTabella(){
+        let tabella = document.getElementById('tabella-db');
+        tabella.parentNode.removeChild(tabella);
+        generaTabella();
+    };
 
 </script>
 
