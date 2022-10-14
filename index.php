@@ -7,8 +7,9 @@
     <title>Mysql + Ajax</title>
 </head>
 <body>
+    <?php require('header.html')?>
 
-    <div class="container">
+    <div class="container my-4">
         <h2 class="text-center">ESERCIZIO PHP-AJAX</h2>
     
     <div id="tabella-container"></div>
@@ -52,6 +53,8 @@
     
 
     </div>
+
+    <?php require('footer.html')?>
 
 <script>
     let persone;
